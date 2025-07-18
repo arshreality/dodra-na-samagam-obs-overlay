@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Samagam</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="top-bar"></div>
+
+    <div class="bottom-container">
+      <div class="title-bar">
+        <div class="title-text">LIVE: New Jersey Samagam 2025</div>
+        <div class="datetime" id="datetime"></div>
+      </div>
+
+      <div class="ticker-bar">
+        <div class="scroll-text">
+          Upcoming Samagams: Denver, CO (Jul 25–27)   |   Vancouver, BC (Aug
+          1–4)   |   Rockville, MD (Aug 15–17)   |   Houston, TX (Aug 22–24)
+            |   Toronto, ON (Aug 29–Sept 1)   |   Seattle, WA (Aug 29–Sept 1)  
+          ———   India Samagams: Dodra, Punjab (Sept 27–Oct 4)   |   Dodra,
+          Punjab (Dec 20–22)   ———   For more info, visit www.samagams.org
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function updateClock() {
+        const now = new Date();
+        const date = now.toLocaleDateString("en-US", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        const time = now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        document.getElementById("datetime").textContent = `${date} • ${time}`;
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
+  </body>
+</html>
