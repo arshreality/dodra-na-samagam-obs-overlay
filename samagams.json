@@ -1,0 +1,92 @@
+[
+  {
+    "city": "Denver, CO",
+    "startDate": "2025-07-25T00:00:00",
+    "endDate": "2025-07-27T00:00:00"
+  },
+  {
+    "city": "Vancouver, BC",
+    "startDate": "2025-08-01T00:00:00",
+    "endDate": "2025-08-04T00:00:00"
+  },
+  {
+    "city": "Rockville, MD",
+    "startDate": "2025-08-15T00:00:00",
+    "endDate": "2025-08-17T00:00:00"
+  },
+  {
+    "city": "Houston, TX",
+    "startDate": "2025-08-22T00:00:00",
+    "endDate": "2025-08-24T00:00:00"
+  },
+  {
+    "city": "Toronto, ON",
+    "startDate": "2025-08-29T00:00:00",
+    "endDate": "2025-09-01T00:00:00"
+  },
+  {
+    "city": "Seattle, WA",
+    "startDate": "2025-08-29T00:00:00",
+    "endDate": "2025-09-01T00:00:00"
+  },
+  {
+    "city": "Atlanta, GA",
+    "startDate": "2025-09-12T00:00:00",
+    "endDate": "2025-09-14T00:00:00"
+  },
+  {
+    "city": "Cleveland, OH",
+    "startDate": "2025-09-19T00:00:00",
+    "endDate": "2025-09-21T00:00:00"
+  },
+  {
+    "city": "Dodra, Punjab",
+    "startDate": "2025-09-27T00:00:00",
+    "endDate": "2025-10-04T00:00:00"
+  },
+  {
+    "city": "Ottawa, ON",
+    "startDate": "2025-10-10T00:00:00",
+    "endDate": "2025-10-13T00:00:00"
+  },
+  {
+    "city": "Calgary, AB",
+    "startDate": "2025-10-10T00:00:00",
+    "endDate": "2025-10-13T00:00:00"
+  },
+  {
+    "city": "Montreal, QC",
+    "startDate": "2025-10-24T00:00:00",
+    "endDate": "2025-10-26T00:00:00"
+  },
+  {
+    "city": "Riverside, CA",
+    "startDate": "2025-10-31T00:00:00",
+    "endDate": "2025-11-02T00:00:00"
+  },
+  {
+    "city": "New York, NY",
+    "startDate": "2025-11-07T00:00:00",
+    "endDate": "2025-11-09T00:00:00"
+  },
+  {
+    "city": "Austin, TX",
+    "startDate": "2025-11-14T00:00:00",
+    "endDate": "2025-11-16T00:00:00"
+  },
+  {
+    "city": "Las Vegas, NV",
+    "startDate": "2025-11-27T00:00:00",
+    "endDate": "2025-11-30T00:00:00"
+  },
+  {
+    "city": "North Carolina",
+    "startDate": "2025-12-12T00:00:00",
+    "endDate": "2025-12-14T00:00:00"
+  },
+  {
+    "city": "Dodra, Punjab",
+    "startDate": "2025-12-20T00:00:00",
+    "endDate": "2025-12-30T00:00:00"
+  }
+]

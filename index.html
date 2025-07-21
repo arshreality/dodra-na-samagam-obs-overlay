@@ -11,20 +11,156 @@
 
     <div class="bottom-container">
       <div class="title-bar">
-        <div class="title-text">LIVE: New Jersey Samagam 2025</div>
+        <div id="title-text">Samagam Name Here</div>
         <div class="datetime" id="datetime"></div>
       </div>
 
-      <div class="ticker-bar">
-        <div class="scroll-text">
-          Upcoming Samagams: Denver, CO (Jul 25–27)   |   Vancouver, BC (Aug
-          1–4)   |   Rockville, MD (Aug 15–17)   |   Houston, TX (Aug 22–24)
-            |   Toronto, ON (Aug 29–Sept 1)   |   Seattle, WA (Aug 29–Sept 1)  
-          ———   India Samagams: Dodra, Punjab (Sept 27–Oct 4)   |   Dodra,
-          Punjab (Dec 20–22)   ———   For more info, visit www.samagams.org
-        </div>
+      <div class="ticker">
+        <div id="event-ticker">Loading upcoming samagams...</div>
       </div>
     </div>
+
+    <script>
+      function getCurrentOrNextSamagam(samagams) {
+        const now = new Date();
+
+        samagams.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+        let currentSamagam = null;
+        let nextSamagam = null;
+
+        for (let i = 0; i < samagams.length; i++) {
+          const samagam = samagams[i];
+          const start = new Date(samagam.startDate);
+          const end = new Date(samagam.endDate);
+          end.setDate(end.getDate() + 2); // 2-day buffer
+          end.setHours(23, 59, 59, 999);
+
+          if (now >= start && now <= end) {
+            if (currentSamagam) {
+              const currentOffset = samagam.timezoneOffsetMinutes ?? 0;
+              const previousOffset = currentSamagam.timezoneOffsetMinutes ?? 0;
+              const systemOffset = -now.getTimezoneOffset();
+
+              const currentDiff = Math.abs(currentOffset - systemOffset);
+              const previousDiff = Math.abs(previousOffset - systemOffset);
+
+              if (currentDiff < previousDiff) {
+                currentSamagam = samagam;
+              }
+            } else {
+              currentSamagam = samagam;
+            }
+          } else if (now < start && !nextSamagam) {
+            nextSamagam = samagam;
+          }
+        }
+
+        return currentSamagam ?? nextSamagam;
+      }
+
+      function formatDateRange(startDate, endDate) {
+        const options = { month: "short", day: "numeric" };
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        const sameMonth = start.getMonth() === end.getMonth();
+        const sameYear = start.getFullYear() === end.getFullYear();
+
+        const startStr = start.toLocaleDateString("en-US", options);
+        const endStr =
+          sameMonth && sameYear
+            ? end.getDate()
+            : end.toLocaleDateString("en-US", options);
+
+        return `${startStr}–${endStr}`;
+      }
+
+      fetch("samagams.json")
+        .then((res) => res.json())
+        .then((samagams) => {
+          const samagam = getCurrentOrNextSamagam(samagams);
+          const banner = document.getElementById("title-text");
+
+          if (samagam) {
+            const dateRange = formatDateRange(
+              samagam.startDate,
+              samagam.endDate
+            );
+            banner.textContent = `LIVE: ${samagam.city.split(",")[0]} Samagam 2025`;
+          } else {
+            banner.textContent = "No upcoming samagams.";
+          }
+        })
+        .catch((err) => {
+          console.error("Error loading samagams:", err);
+          document.getElementById("title-text").textContent =
+            "Error loading samagam info.";
+        });
+    </script>
+
+    <script>
+      async function loadTicker() {
+        try {
+          const response = await fetch("samagams.json");
+          const events = await response.json();
+
+          const today = new Date();
+
+          // Split by region
+          const northAmerica = events.filter(
+            (e) =>
+              e.city.includes(",") && !e.city.toLowerCase().includes("punjab")
+          );
+          const india = events.filter((e) =>
+            e.city.toLowerCase().includes("punjab")
+          );
+
+          // Format helper
+          function formatDateRange(startStr, endStr) {
+            const start = new Date(startStr);
+            const end = new Date(endStr);
+
+            const sameMonth = start.getMonth() === end.getMonth();
+            const opts = { month: "short", day: "numeric" };
+
+            const startFormatted = start.toLocaleDateString("en-US", opts);
+            const endFormatted = sameMonth
+              ? end.getDate()
+              : end.toLocaleDateString("en-US", opts);
+
+            return `${startFormatted}–${endFormatted}`;
+          }
+
+          function formatEvent(e) {
+            return `${e.city} (${formatDateRange(e.startDate, e.endDate)})`;
+          }
+
+          // Get next 7 upcoming North America events
+          const upcomingNA = northAmerica
+            .filter((e) => new Date(e.endDate) >= today)
+            .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+            .slice(0, 7);
+
+          const perpetualIndia = india.sort(
+            (a, b) => new Date(a.startDate) - new Date(b.startDate)
+          );
+
+          const naString = upcomingNA.map(formatEvent).join("   |   ");
+          const indiaString = perpetualIndia.map(formatEvent).join("   |   ");
+
+          const finalTicker = `Upcoming Samagams: ${naString}   ———   India Samagams: ${indiaString}   ———   For more info, visit www.samagams.org`;
+
+          document.getElementById("event-ticker").innerHTML = finalTicker;
+        } catch (err) {
+          console.error("Error loading samagams:", err);
+          document.getElementById("event-ticker").textContent =
+            "Unable to load samagams.";
+        }
+      }
+
+      loadTicker();
+    </script>
 
     <script>
       function updateClock() {
