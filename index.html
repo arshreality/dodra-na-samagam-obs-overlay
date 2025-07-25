@@ -1,203 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Live Samagam</title>
-      <link rel="stylesheet" href="style.css" />
-   </head>
-   <body>
-      <div class="top-bar"></div>
-      <div class="bottom-container">
-         <div class="title-bar">
-            <div id="title-text">Samagam Name Here</div>
-            <div class="datetime" id="datetime"></div>
-         </div>
-         <div class="ticker">
-            <div id="event-ticker">Loading upcoming samagams...</div>
-         </div>
-      </div>
-      <script>
-         function getOffsetMinutes(dateString) {
-         const match = dateString.match(/([+-])(\d{2}):(\d{2})$/);
-         if (!match) return null;
-         
-         const sign = match[1] === '-' ? -1 : 1;
-         const hours = parseInt(match[2], 10);
-         const minutes = parseInt(match[3], 10);
-         return sign * (hours * 60 + minutes);
-         }
-         
-         
-         function getCurrentOrNextSamagam(samagams) {
-         const now = new Date();
-         
-         // Sort samagams chronologically. This is correct.
-         samagams.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-         
-         let currentSamagam = null;
-         let nextSamagam = null;
-         
-         for (const samagam of samagams) {
-         const start = new Date(samagam.startDate);
-         const end = new Date(samagam.endDate);
-         
-         // The 2-day buffer logic is kept as it seems intentional.
-         end.setDate(end.getDate() + 2);
-         end.setHours(23, 59, 59, 999);
-         
-         // Check if the samagam is happening now
-         if (now >= start && now <= end) {
-         if (currentSamagam) {
-         
-           // Get offsets in minutes from the date strings
-           const currentOffset = getOffsetMinutes(samagam.startDate) ?? 0;
-           const previousOffset = getOffsetMinutes(currentSamagam.startDate) ?? 0;
-           
-           // Get the system's timezone offset in minutes.
-           // The sign is inverted to match the ISO 8601 standard.
-           const systemOffset = -now.getTimezoneOffset();
-         
-           const currentDiff = Math.abs(currentOffset - systemOffset);
-           const previousDiff = Math.abs(previousOffset - systemOffset);
-         
-           // If the new samagam is "closer" to the user's timezone, update it.
-           if (currentDiff < previousDiff) {
-             currentSamagam = samagam;
-           }
-         } else {
-           // This is the first "current" samagam found.
-           currentSamagam = samagam;
-         }
-         } else if (now < start && !nextSamagam) {
-         // Since the list is sorted, this is the next upcoming samagam.
-         nextSamagam = samagam;
-         }
-         }
-         
-         return currentSamagam ?? nextSamagam;
-         }
-         
-         
-         function formatDateRange(startDate, endDate) {
-           const options = { month: "short", day: "numeric" };
-           const start = new Date(startDate);
-           const end = new Date(endDate);
-         
-           const sameMonth = start.getMonth() === end.getMonth();
-           const sameYear = start.getFullYear() === end.getFullYear();
-         
-           const startStr = start.toLocaleDateString("en-US", options);
-           const endStr =
-             sameMonth && sameYear
-               ? end.getDate()
-               : end.toLocaleDateString("en-US", options);
-         
-           return `${startStr}–${endStr}`;
-         }
-         
-         fetch("samagams.json")
-           .then((res) => res.json())
-           .then((samagams) => {
-             const samagam = getCurrentOrNextSamagam(samagams);
-             const banner = document.getElementById("title-text");
-         
-             if (samagam) {
-               const dateRange = formatDateRange(
-                 samagam.startDate,
-                 samagam.endDate
-               );
-               banner.textContent = `LIVE: ${samagam.city.split(",")[0]} Samagam 2025`;
-             } else {
-               banner.textContent = "No upcoming samagams.";
-             }
-           })
-           .catch((err) => {
-             console.error("Error loading samagams:", err);
-             document.getElementById("title-text").textContent =
-               "Error loading samagam info.";
-           });
-      </script>
-      <script>
-         async function loadTicker() {
-           try {
-             const response = await fetch("samagams.json");
-             const events = await response.json();
-         
-             const today = new Date();
-         
-             // Split by region
-             const northAmerica = events.filter(
-               (e) =>
-                 e.city.includes(",") && !e.city.toLowerCase().includes("punjab")
-             );
-             const india = events.filter((e) =>
-               e.city.toLowerCase().includes("punjab")
-             );
-         
-             // Format helper
-             function formatDateRange(startStr, endStr) {
-               const start = new Date(startStr);
-               const end = new Date(endStr);
-         
-               const sameMonth = start.getMonth() === end.getMonth();
-               const opts = { month: "short", day: "numeric" };
-         
-               const startFormatted = start.toLocaleDateString("en-US", opts);
-               const endFormatted = sameMonth
-                 ? end.getDate()
-                 : end.toLocaleDateString("en-US", opts);
-         
-               return `${startFormatted}–${endFormatted}`;
-             }
-         
-             function formatEvent(e) {
-               return `${e.city} (${formatDateRange(e.startDate, e.endDate)})`;
-             }
-         
-             // Get next 7 upcoming North America events
-             const upcomingNA = northAmerica
-               .filter((e) => new Date(e.endDate) >= today)
-               .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-               .slice(0, 7);
-         
-             const perpetualIndia = india.sort(
-               (a, b) => new Date(a.startDate) - new Date(b.startDate)
-             );
-         
-             const naString = upcomingNA.map(formatEvent).join("   |   ");
-             const indiaString = perpetualIndia.map(formatEvent).join("   |   ");
-         
-             const finalTicker = `Upcoming Samagams: ${naString}   ———   India Samagams: ${indiaString}   ———   For more info, visit www.samagams.org`;
-         
-             document.getElementById("event-ticker").innerHTML = finalTicker;
-           } catch (err) {
-             console.error("Error loading samagams:", err);
-             document.getElementById("event-ticker").textContent =
-               "Unable to load samagams.";
-           }
-         }
-         
-         loadTicker();
-      </script>
-      <script>
-         function updateClock() {
-           const now = new Date();
-           const date = now.toLocaleDateString("en-US", {
-             weekday: "short",
-             day: "2-digit",
-             month: "short",
-             year: "numeric",
-           });
-           const time = now.toLocaleTimeString("en-US", {
-             hour: "2-digit",
-             minute: "2-digit",
-           });
-           document.getElementById("datetime").textContent = `${date} • ${time}`;
-         }
-         
-         setInterval(updateClock, 1000);
-         updateClock();
-      </script>
-   </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Samagam</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="top-bar"></div>
+  <div class="bottom-container">
+    <div class="title-bar">
+      <div id="title-text">Samagam Name Here</div>
+      <div class="datetime" id="datetime"></div>
+    </div>
+    <div class="ticker">
+      <div id="event-ticker">Loading upcoming samagams...</div>
+    </div>
+  </div>
+  <script>
+    function getOffsetMinutes(dateString) {
+      const match = dateString.match(/([+-])(\d{2}):(\d{2})$/);
+      if (!match) return null;
+
+      const sign = match[1] === '-' ? -1 : 1;
+      const hours = parseInt(match[2], 10);
+      const minutes = parseInt(match[3], 10);
+      return sign * (hours * 60 + minutes);
+    }
+
+
+    function getCurrentOrNextSamagam(samagams) {
+      const now = new Date();
+
+      // Sort samagams chronologically. This is correct.
+      samagams.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+      let currentSamagam = null;
+      let nextSamagam = null;
+
+      for (const samagam of samagams) {
+        const start = new Date(samagam.startDate);
+        const end = new Date(samagam.endDate);
+
+        // The 2-day buffer logic is kept as it seems intentional.
+        end.setDate(end.getDate() + 2);
+        end.setHours(23, 59, 59, 999);
+
+        // Check if the samagam is happening now
+        if (now >= start && now <= end) {
+          if (currentSamagam) {
+
+            // Get offsets in minutes from the date strings
+            const currentOffset = getOffsetMinutes(samagam.startDate) ?? 0;
+            const previousOffset = getOffsetMinutes(currentSamagam.startDate) ?? 0;
+
+            // Get the system's timezone offset in minutes.
+            // The sign is inverted to match the ISO 8601 standard.
+            const systemOffset = -now.getTimezoneOffset();
+
+            const currentDiff = Math.abs(currentOffset - systemOffset);
+            const previousDiff = Math.abs(previousOffset - systemOffset);
+
+            // If the new samagam is "closer" to the user's timezone, update it.
+            if (currentDiff < previousDiff) {
+              currentSamagam = samagam;
+            }
+          } else {
+            // This is the first "current" samagam found.
+            currentSamagam = samagam;
+          }
+        } else if (now < start && !nextSamagam) {
+          // Since the list is sorted, this is the next upcoming samagam.
+          nextSamagam = samagam;
+        }
+      }
+
+      return currentSamagam ?? nextSamagam;
+    }
+
+
+    function formatDateRange(startDate, endDate) {
+      const options = { month: "short", day: "numeric" };
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      const sameMonth = start.getMonth() === end.getMonth();
+      const sameYear = start.getFullYear() === end.getFullYear();
+
+      const startStr = start.toLocaleDateString("en-US", options);
+      const endStr =
+        sameMonth && sameYear
+          ? end.getDate()
+          : end.toLocaleDateString("en-US", options);
+
+      return `${startStr}–${endStr}`;
+    }
+
+    fetch("samagams.json")
+      .then((res) => res.json())
+      .then((samagams) => {
+        const samagam = getCurrentOrNextSamagam(samagams);
+        const banner = document.getElementById("title-text");
+
+        if (samagam) {
+          const dateRange = formatDateRange(
+            samagam.startDate,
+            samagam.endDate
+          );
+          banner.textContent = `LIVE: ${samagam.city.split(",")[0]} Samagam 2025`;
+        } else {
+          banner.textContent = "No upcoming samagams.";
+        }
+      })
+      .catch((err) => {
+        console.error("Error loading samagams:", err);
+        document.getElementById("title-text").textContent =
+          "Error loading samagam info.";
+      });
+  </script>
+  <script>
+    async function loadTicker() {
+      try {
+        const response = await fetch("samagams.json");
+        const events = await response.json();
+
+        const today = new Date();
+
+        // Split by region
+        const northAmerica = events.filter(
+          (e) =>
+            e.city.includes(",") && !e.city.toLowerCase().includes("punjab")
+        );
+        const india = events.filter((e) =>
+          e.city.toLowerCase().includes("punjab")
+        );
+
+        // Format helper
+        function formatDateRange(startStr, endStr) {
+          const start = new Date(startStr.substring(0, 10)); // YYYY-MM-DD
+          const end = new Date(endStr.substring(0, 10));
+
+          const sameMonth = start.getMonth() === end.getMonth();
+          const opts = { month: "short", day: "numeric" };
+
+          const startFormatted = start.toLocaleDateString("en-US", opts);
+          const endFormatted = sameMonth
+            ? end.getDate()
+            : end.toLocaleDateString("en-US", opts);
+
+          return `${startFormatted}–${endFormatted}`;
+        }
+
+        function formatEvent(e) {
+          return `${e.city} (${formatDateRange(e.startDate, e.endDate)})`;
+        }
+
+        // Get next 7 upcoming North America events
+        const upcomingNA = northAmerica
+          .filter((e) => new Date(e.endDate) >= today)
+          .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+          .slice(0, 7);
+
+        const perpetualIndia = india.sort(
+          (a, b) => new Date(a.startDate) - new Date(b.startDate)
+        );
+
+        const naString = upcomingNA.map(formatEvent).join("   |   ");
+        const indiaString = perpetualIndia.map(formatEvent).join("   |   ");
+
+        const finalTicker = `Upcoming Samagams: ${naString}   ———   India Samagams: ${indiaString}   ———   For more info, visit www.samagams.org`;
+
+        document.getElementById("event-ticker").innerHTML = finalTicker;
+      } catch (err) {
+        console.error("Error loading samagams:", err);
+        document.getElementById("event-ticker").textContent =
+          "Unable to load samagams.";
+      }
+    }
+
+    loadTicker();
+  </script>
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const date = now.toLocaleDateString("en-US", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+      const time = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      document.getElementById("datetime").textContent = `${date} • ${time}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+
 </html>
