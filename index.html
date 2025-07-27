@@ -166,16 +166,18 @@
         const upcomingNA = northAmerica
           .filter((e) => new Date(e.endDate) >= today)
           .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-          .slice(0, 7);
+          .slice(1, 6);
 
         const perpetualIndia = india.sort(
           (a, b) => new Date(a.startDate) - new Date(b.startDate)
         );
 
         const naString = upcomingNA.map(formatEvent).join("   |   ");
+
+        // TODO: figure out how to show this in a static image.
         const indiaString = perpetualIndia.map(formatEvent).join("   |   ");
 
-        const finalTicker = `Upcoming Samagams: ${naString}   ———   India Samagams: ${indiaString}   ———   For more info, visit www.samagams.org`;
+        const finalTicker = `${naString} - samagams.org`;
 
         document.getElementById("event-ticker").innerHTML = finalTicker;
       } catch (err) {
