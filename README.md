@@ -1,47 +1,45 @@
-Step 1: Set up OBS Overlay
-Download the OBS Overlay folder from the Google Drive shared by dodrasevaapp@gmail.com
+# OBS Overlay Setup Guide ⚙️
 
-Open OBS Studio on your computer
+This guide provides step-by-step instructions for setting up the Shabad Type and Translate Machine (STTM) overlay in OBS Studio.
 
-Click the + button under Sources and select Browser
+---
 
-Name the source (e.g., "Overlay")
+### ## Step 1: Configure the Initial OBS Overlay
 
-In the URL field, enter the local file path to the overlay HTML file, e.g.,
-file:///C:/path/to/OBS Overlay/index.html
+1.  Download the `OBS Overlay` folder from the Google Drive shared by `dodrasevaapp@gmail.com`.
+2.  Open **OBS Studio** on your computer.
+3.  In the **Sources** box, click the **+** button and select **Browser**.
+4.  Name the new source (e.g., `Overlay`) and click **OK**.
+5.  In the properties window:
+    * For the **URL** field, enter the local file path to the overlay's HTML file.
+        * *Example:* `file:///C:/path/to/OBS Overlay/index.html`
+    * Set the **Width** to `1280`.
+    * Set the **Height** to `720`.
+6.  Click **OK**.
+7.  Position and resize the overlay in the OBS preview window as needed.
 
-Set the Width and Height to 1280 and 720 respectively.
+---
 
-Click OK
+### ## Step 2: Configure the STTM Laptop 💻
 
-Position and resize the overlay in OBS as needed
+1.  Ensure the **STTM** application is running and the laptop is connected to the **same Wi-Fi network** as the OBS laptop.
+2.  Disable the Windows Firewall.
+3.  In the STTM Bani Overlay settings, make the following changes:
+    * Change the them to a **A New Day**.
+    * Set the STTM view to display on the **top only**.
+4.  Navigate to the Bani Overlay page within STTM and **copy the local network URL** it provides.
+5.  On the OBS laptop, open a web browser and paste the copied URL to confirm the overlay displays correctly.
 
+---
 
-Step 2: Set Up on the STTM Laptop
-Make sure the STTM is running and the laptop is connected to the same Wi-Fi as the OBS laptop.
+### ## Step 3: Integrate STTM with OBS 🔗
 
-Change the Gurbani and English text to white color
-
-Change the background color to hex color #4897AC 
-
-Change the STTM view to be on the top only.
-
-Copy the local address given by the Bani Overlay page on STTM.
-
-Confirm the overlay displays correctly in a browser window on the OBS laptop
-
-
-Step 3: Add Browser Source in OBS on STTM Laptop
-Open OBS Studio on the OBS laptop
-
-In the Sources box, click the + button and choose Browser
-
-Name the source (e.g., “STTM”)
-
-In the URL field, enter the URL you used to open the overlay in the browser
-
-Set the Width and Height to 1280 and 720 respectively.
-
-Click OK
-
-Resize and position the overlay in the OBS preview as needed
+1.  On the **OBS laptop**, return to OBS Studio.
+2.  In the **Sources** box, click the **+** button and choose **Browser**.
+3.  Name the new source (e.g., `STTM`) and click **OK**.
+4.  In the properties window:
+    * In the **URL** field, paste the STTM network URL you copied earlier.
+    * Set the **Width** to `1280`.
+    * Set the **Height** to `720`.
+5.  Click **OK**.
+6.  Resize and position the new STTM browser source in the OBS preview as needed. You are now ready to stream! 🎉
