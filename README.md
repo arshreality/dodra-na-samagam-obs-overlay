@@ -4,7 +4,7 @@ This guide provides step-by-step instructions for setting up the Shabad Type and
 
 ---
 
-### ## Step 1: Configure the Initial OBS Overlay
+## Step 1: Configure the Initial OBS Overlay
 
 1.  Download the `OBS Overlay` folder from the Google Drive shared by `dodrasevaapp@gmail.com`.
 2.  Open **OBS Studio** on your computer.
@@ -20,7 +20,7 @@ This guide provides step-by-step instructions for setting up the Shabad Type and
 
 ---
 
-### ## Step 2: Configure the STTM Laptop 💻
+## Step 2: Configure the STTM Laptop 💻
 
 1.  Ensure the **STTM** application is running and the laptop is connected to the **same Wi-Fi network** as the OBS laptop.
 2.  Disable the Windows Firewall.
@@ -32,7 +32,7 @@ This guide provides step-by-step instructions for setting up the Shabad Type and
 
 ---
 
-### ## Step 3: Integrate STTM with OBS 🔗
+## Step 3: Integrate STTM with OBS 🔗
 
 1.  On the **OBS laptop**, return to OBS Studio.
 2.  In the **Sources** box, click the **+** button and choose **Browser**.
