@@ -60,16 +60,5 @@ body {
 #event-ticker {
   display: inline-block;
   white-space: nowrap;
-  /*padding-left: 100%;*/
-  /*animation: scroll-left 45s linear infinite;*/
   font-size: 18px;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
 }
