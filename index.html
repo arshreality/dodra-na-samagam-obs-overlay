@@ -162,22 +162,25 @@
           return `${e.city} (${formatDateRange(e.startDate, e.endDate)})`;
         }
 
-        // Get next 7 upcoming North America events
         const upcomingNA = northAmerica
-          .filter((e) => new Date(e.endDate) >= today)
+          .filter((e) => new Date(e.startDate) > today)
           .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-          .slice(1, 6);
+          .slice(1, 5);
 
-        const perpetualIndia = india.sort(
-          (a, b) => new Date(a.startDate) - new Date(b.startDate)
-        );
+        // Find the single next upcoming Samagam in India
+        const upcomingIndia = india
+              .filter((e) => new Date(e.startDate) > today)
+              .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+              .slice(0, 1);
 
         const naString = upcomingNA.map(formatEvent).join("   |   ");
+        // Format the single India samagam. Using .map().join() safely handles the case where no upcoming event is found.
+        const indiaString = upcomingIndia.map(formatEvent).join("");
 
-        // TODO: figure out how to show this in a static image.
-        const indiaString = perpetualIndia.map(formatEvent).join("   |   ");
+        // Create an array of all event strings and filter out any empty ones (e.g., if no NA or India samagams are found)
+        const allEventsString = [naString, indiaString].filter(Boolean).join("   |   ");
 
-        const finalTicker = `${naString} - samagams.org`;
+        const finalTicker = `${allEventsString} - samagams.org`;
 
         document.getElementById("event-ticker").innerHTML = finalTicker;
       } catch (err) {
