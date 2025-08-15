@@ -165,7 +165,7 @@
         const upcomingNA = northAmerica
           .filter((e) => new Date(e.startDate) > today)
           .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-          .slice(1, 5);
+          .slice(0, 5);
 
         // Find the single next upcoming Samagam in India
         const upcomingIndia = india
