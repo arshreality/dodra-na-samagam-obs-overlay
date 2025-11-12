@@ -126,7 +126,9 @@
         const response = await fetch("samagams.json");
         const events = await response.json();
 
+        // Use start-of-day so events that start today are included as "upcoming"
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         // Split by region
         const northAmerica = events.filter(
@@ -137,29 +139,30 @@
           e.city.toLowerCase().includes("punjab")
         );
 
-        // Format helper
-        function formatDateRange(startStr, endStr) {
-          const start = new Date(startStr.substring(0, 10)); // YYYY-MM-DD
-          const end = new Date(endStr.substring(0, 10));
-
-          // Add 1 day to both start and end dates as a stopgap
-          // TODO: fix this please
-          start.setDate(start.getDate() + 1);
-          end.setDate(end.getDate() + 1);
+        // Build a display string from YYYY-MM-DD parts and store it on the event
+        function formatYMDRange(startStr, endStr) {
+          // Extract YYYY-MM-DD (safe even if the original string contains time/tz)
+          const s = startStr.substring(0, 10).split("-").map(Number);
+          const t = endStr.substring(0, 10).split("-").map(Number);
+          const start = new Date(s[0], s[1] - 1, s[2]);
+          const end = new Date(t[0], t[1] - 1, t[2]);
 
           const sameMonth = start.getMonth() === end.getMonth();
           const opts = { month: "short", day: "numeric" };
 
           const startFormatted = start.toLocaleDateString("en-US", opts);
-          const endFormatted = sameMonth
-            ? end.getDate()
-            : end.toLocaleDateString("en-US", opts);
+          const endFormatted = sameMonth ? end.getDate() : end.toLocaleDateString("en-US", opts);
 
           return `${startFormatted}–${endFormatted}`;
         }
 
+        // Precompute display ranges as strings on each event so the HTML uses stable strings
+        events.forEach((e) => {
+          e.displayRange = formatYMDRange(e.startDate, e.endDate);
+        });
+
         function formatEvent(e) {
-          return `${e.city} (${formatDateRange(e.startDate, e.endDate)})`;
+          return `${e.city} (${e.displayRange})`;
         }
 
         const upcomingNA = northAmerica
@@ -168,10 +171,10 @@
           .slice(0, 5);
 
         // Find the single next upcoming Samagam in India
-        const upcomingIndia = india
+    const upcomingIndia = india
               .filter((e) => new Date(e.startDate) > today)
               .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-              .slice(0, 1);
+      .slice(0, 1);
 
         const naString = upcomingNA.map(formatEvent).join("   |   ");
         // Format the single India samagam. Using .map().join() safely handles the case where no upcoming event is found.
