@@ -178,7 +178,7 @@
 
         const naString = upcomingNA.map(formatEvent).join("   |   ");
         // Format the single India samagam. Using .map().join() safely handles the case where no upcoming event is found.
-        const indiaString = upcomingIndia.map(formatEvent).join("");
+        const indiaString = upcomingIndia.map(formatEvent).map(s => `<b>${s}</b>`).join("");
 
         // Create an array of all event strings and filter out any empty ones (e.g., if no NA or India samagams are found)
         const allEventsString = [naString, indiaString].filter(Boolean).join("   |   ");
