@@ -1,92 +1,107 @@
 [
   {
-    "city": "Denver, CO",
-    "startDate": "2025-07-25T00:00:00-06:00",
-    "endDate": "2025-07-27T00:00:00-06:00"
+    "city": "Melbourne, AU",
+    "startDate": "2026-01-22T00:00:00+11:00",
+    "endDate": "2026-01-26T00:00:00+11:00"
   },
   {
-    "city": "Vancouver, BC",
-    "startDate": "2025-08-01T00:00:00-07:00",
-    "endDate": "2025-08-04T00:00:00-07:00"
+    "city": "Sydney, AU",
+    "startDate": "2026-07-08T00:00:00+10:00",
+    "endDate": "2026-07-12T00:00:00+10:00"
   },
   {
-    "city": "Rockville, MD",
-    "startDate": "2025-08-15T00:00:00-04:00",
-    "endDate": "2025-08-17T00:00:00-04:00"
+    "city": "Manchester, UK",
+    "startDate": "2026-04-17T00:00:00+01:00",
+    "endDate": "2026-04-19T00:00:00+01:00"
   },
   {
-    "city": "Houston, TX",
-    "startDate": "2025-08-22T00:00:00-05:00",
-    "endDate": "2025-08-24T00:00:00-05:00"
+    "city": "Mexico City, MX",
+    "startDate": "2026-01-16T00:00:00-06:00",
+    "endDate": "2026-01-19T00:00:00-06:00"
   },
   {
-    "city": "Toronto, ON",
-    "startDate": "2025-08-29T00:00:00-04:00",
-    "endDate": "2025-09-01T00:00:00-04:00"
+    "city": "Fort Lauderdale, FL",
+    "startDate": "2026-01-30T00:00:00-05:00",
+    "endDate": "2026-02-01T00:00:00-05:00"
   },
   {
-    "city": "Seattle, WA",
-    "startDate": "2025-08-29T00:00:00-07:00",
-    "endDate": "2025-09-01T00:00:00-07:00"
+    "city": "Albuquerque, NM",
+    "startDate": "2026-01-30T00:00:00-07:00",
+    "endDate": "2026-02-01T00:00:00-07:00"
   },
   {
-    "city": "Atlanta, GA",
-    "startDate": "2025-09-12T00:00:00-04:00",
-    "endDate": "2025-09-14T00:00:00-04:00"
+    "city": "Dallas, TX",
+    "startDate": "2026-02-13T00:00:00-06:00",
+    "endDate": "2026-02-16T00:00:00-06:00"
   },
   {
-    "city": "Cleveland, OH",
-    "startDate": "2025-09-19T00:00:00-04:00",
-    "endDate": "2025-09-21T00:00:00-04:00"
+    "city": "Sacramento, CA",
+    "startDate": "2026-02-27T00:00:00-08:00",
+    "endDate": "2026-03-01T00:00:00-08:00"
+  },
+  {
+    "city": "Ventura, CA",
+    "startDate": "2026-03-13T00:00:00-07:00",
+    "endDate": "2026-03-15T00:00:00-07:00"
   },
   {
     "city": "Dodra, Punjab",
-    "startDate": "2025-09-27T00:00:00+05:30",
-    "endDate": "2025-10-04T00:00:00+05:30"
+    "startDate": "2026-03-21T00:00:00+05:30",
+    "endDate": "2026-03-28T00:00:00+05:30"
   },
   {
-    "city": "Ottawa, ON",
-    "startDate": "2025-10-10T00:00:00-04:00",
-    "endDate": "2025-10-13T00:00:00-04:00"
+    "city": "Southington, CT",
+    "startDate": "2026-04-03T00:00:00-04:00",
+    "endDate": "2026-04-05T00:00:00-04:00"
   },
   {
-    "city": "Calgary, AB",
-    "startDate": "2025-10-10T00:00:00-06:00",
-    "endDate": "2025-10-13T00:00:00-06:00"
+    "city": "Detroit, MI",
+    "startDate": "2026-04-24T00:00:00-04:00",
+    "endDate": "2026-04-26T00:00:00-04:00"
   },
   {
     "city": "Montreal, QC",
-    "startDate": "2025-10-24T00:00:00-04:00",
-    "endDate": "2025-10-26T00:00:00-04:00"
+    "startDate": "2026-05-01T00:00:00-04:00",
+    "endDate": "2026-05-03T00:00:00-04:00"
   },
   {
-    "city": "Riverside, CA",
-    "startDate": "2025-10-31T00:00:00-07:00",
-    "endDate": "2025-11-02T00:00:00-07:00"
+    "city": "Porterville, CA",
+    "startDate": "2026-05-01T00:00:00-07:00",
+    "endDate": "2026-05-03T00:00:00-07:00"
   },
   {
-    "city": "New York, NY",
-    "startDate": "2025-11-07T00:00:00-05:00",
-    "endDate": "2025-11-09T00:00:00-05:00"
+    "city": "Winnipeg, MB",
+    "startDate": "2026-05-15T00:00:00-05:00",
+    "endDate": "2026-05-18T00:00:00-05:00"
   },
   {
-    "city": "Austin, TX",
-    "startDate": "2025-11-14T00:00:00-06:00",
-    "endDate": "2025-11-16T00:00:00-06:00"
+    "city": "Fairfax, VA",
+    "startDate": "2026-05-22T00:00:00-04:00",
+    "endDate": "2026-05-25T00:00:00-04:00"
   },
   {
-    "city": "Las Vegas, NV",
-    "startDate": "2025-11-27T00:00:00-08:00",
-    "endDate": "2025-11-30T00:00:00-08:00"
+    "city": "Doraha, Punjab",
+    "startDate": "2026-05-30T00:00:00+05:30",
+    "endDate": "2026-06-06T00:00:00+05:30"
   },
   {
-    "city": "Raleigh, NC",
-    "startDate": "2025-12-12T00:00:00-05:00",
-    "endDate": "2025-12-14T00:00:00-05:00"
+    "city": "Los Angeles, CA",
+    "startDate": "2026-06-12T00:00:00-07:00",
+    "endDate": "2026-06-14T00:00:00-07:00"
   },
   {
-    "city": "Dodra, Punjab",
-    "startDate": "2025-12-20T00:00:00+05:30",
-    "endDate": "2025-12-30T00:00:00+05:30"
+    "city": "San Antonio, TX",
+    "startDate": "2026-06-19T00:00:00-05:00",
+    "endDate": "2026-06-21T00:00:00-05:00"
+  },
+  {
+    "city": "Edmonton, AB",
+    "startDate": "2026-06-26T00:00:00-06:00",
+    "endDate": "2026-06-28T00:00:00-06:00"
+  },
+  {
+    "city": "San Francisco, CA",
+    "startDate": "2026-07-02T00:00:00-07:00",
+    "endDate": "2026-07-05T00:00:00-07:00"
   }
 ]
