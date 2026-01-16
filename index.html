@@ -109,7 +109,7 @@
             samagam.startDate,
             samagam.endDate
           );
-          banner.textContent = `LIVE: ${samagam.city.split(",")[0]} Samagam 2025`;
+          banner.textContent = `LIVE: ${samagam.city.split(",")[0]} Samagam 2026`;
         } else {
           banner.textContent = "No upcoming samagams.";
         }
@@ -168,7 +168,7 @@
         const upcomingNA = northAmerica
           .filter((e) => new Date(e.startDate) > today)
           .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-          .slice(0, 5);
+          .slice(0, 3);
 
         // Find the single next upcoming Samagam in India
     const upcomingIndia = india
