@@ -122,76 +122,63 @@
   </script>
   <script>
     async function loadTicker() {
-      try {
-        const response = await fetch("samagams.json");
-        const events = await response.json();
+  try {
+    const response = await fetch("samagams.json");
+    const events = await response.json();
 
-        // Use start-of-day so events that start today are included as "upcoming"
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-        // Split by region
-        const northAmerica = events.filter(
-          (e) =>
-            e.city.includes(",") && !e.city.toLowerCase().includes("punjab")
-        );
-        const india = events.filter((e) =>
-          e.city.toLowerCase().includes("punjab")
-        );
+    // Precompute readable date ranges
+    function formatYMDRange(startStr, endStr) {
+      const s = startStr.substring(0, 10).split("-").map(Number);
+      const t = endStr.substring(0, 10).split("-").map(Number);
+      const start = new Date(s[0], s[1] - 1, s[2]);
+      const end = new Date(t[0], t[1] - 1, t[2]);
 
-        // Build a display string from YYYY-MM-DD parts and store it on the event
-        function formatYMDRange(startStr, endStr) {
-          // Extract YYYY-MM-DD (safe even if the original string contains time/tz)
-          const s = startStr.substring(0, 10).split("-").map(Number);
-          const t = endStr.substring(0, 10).split("-").map(Number);
-          const start = new Date(s[0], s[1] - 1, s[2]);
-          const end = new Date(t[0], t[1] - 1, t[2]);
+      const sameMonth = start.getMonth() === end.getMonth();
+      const opts = { month: "short", day: "numeric" };
 
-          const sameMonth = start.getMonth() === end.getMonth();
-          const opts = { month: "short", day: "numeric" };
+      const startFormatted = start.toLocaleDateString("en-US", opts);
+      const endFormatted = sameMonth ? end.getDate() : end.toLocaleDateString("en-US", opts);
 
-          const startFormatted = start.toLocaleDateString("en-US", opts);
-          const endFormatted = sameMonth ? end.getDate() : end.toLocaleDateString("en-US", opts);
-
-          return `${startFormatted}–${endFormatted}`;
-        }
-
-        // Precompute display ranges as strings on each event so the HTML uses stable strings
-        events.forEach((e) => {
-          e.displayRange = formatYMDRange(e.startDate, e.endDate);
-        });
-
-        function formatEvent(e) {
-          return `${e.city} (${e.displayRange})`;
-        }
-
-        const upcomingNA = northAmerica
-          .filter((e) => new Date(e.startDate) > today)
-          .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-          .slice(0, 3);
-
-        // Find the single next upcoming Samagam in India
-    const upcomingIndia = india
-              .filter((e) => new Date(e.startDate) > today)
-              .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-      .slice(0, 1);
-
-        const naString = upcomingNA.map(formatEvent).join("   |   ");
-        // Format the single India samagam. Using .map().join() safely handles the case where no upcoming event is found.
-        const indiaString = upcomingIndia.map(formatEvent).map(s => `<b>${s}</b>`).join("");
-
-        // Create an array of all event strings and filter out any empty ones (e.g., if no NA or India samagams are found)
-        const allEventsString = [naString, indiaString].filter(Boolean).join("   |   ");
-
-        const finalTicker = `${allEventsString} - samagams.org`;
-
-        document.getElementById("event-ticker").innerHTML = finalTicker;
-      } catch (err) {
-        console.error("Error loading samagams:", err);
-        document.getElementById("event-ticker").textContent =
-          "Unable to load samagams.";
-      }
+      return `${startFormatted}–${endFormatted}`;
     }
+
+    events.forEach((e) => {
+      e.displayRange = formatYMDRange(e.startDate, e.endDate);
+      e.isIndia = e.city.toLowerCase().includes("punjab");
+    });
+
+    // Build ONE combined upcoming list
+    const upcoming = events
+      .filter((e) => new Date(e.startDate) > today)
+      .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+    // Limit: first 3 NA + first 1 India, but still merge + sort
+    const na = upcoming.filter((e) => !e.isIndia).slice(0, 4);
+    const india = upcoming.filter((e) => e.isIndia).slice(0, 1);
+
+    const merged = [...na, ...india].sort(
+      (a, b) => new Date(a.startDate) - new Date(b.startDate)
+    );
+
+    // Format with bold for India samagams
+    function formatEvent(e) {
+      const text = `${e.city} (${e.displayRange})`;
+      return e.isIndia ? `<b>${text}</b>` : text;
+    }
+
+    const finalTicker =
+      merged.map(formatEvent).join("   |   ") + " - samagams.org";
+
+    document.getElementById("event-ticker").innerHTML = finalTicker;
+  } catch (err) {
+    console.error("Error loading samagams:", err);
+    document.getElementById("event-ticker").textContent =
+      "Unable to load samagams.";
+  }
+}
 
     loadTicker();
   </script>
